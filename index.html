@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>KHT AI Assistant</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+
+<body>
+
+    <div class="app">
+
+        <!-- =========================
+             HEADER
+        ========================== -->
+
+        <header class="header">
+
+            <div class="brand">
+
+                <div class="logo">
+                    KHT
+                </div>
+
+                <div>
+
+                    <h1>KHT AI Assistant</h1>
+
+                    <p>
+                        Knowledge & Operations Support
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                <span>
+                    AI Assistant
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             MAIN CONTENT
+        ========================== -->
+
+        <main class="main">
+
+
+            <!-- WELCOME SECTION -->
+
+            <section class="welcome">
+
+                <div class="welcome-icon">
+                    ✦
+                </div>
+
+                <h2>
+                    How can I help you?
+                </h2>
+
+                <p>
+                    Ask questions about KHT operations,
+                    procedures, HSE, permits, equipment,
+                    and operational data.
+                </p>
+
+            </section>
+
+
+            <!-- QUESTION BOX -->
+
+            <section class="question-card">
+
+                <textarea
+                    id="question"
+                    placeholder="Ask a question about KHT..."
+                    rows="4"
+                ></textarea>
+
+
+                <div class="question-footer">
+
+                    <span class="hint">
+                        Ask about procedures, HSE, permits or operations
+                    </span>
+
+                    <button
+                        id="askButton"
+                        onclick="askQuestion()"
+                    >
+                        Ask Assistant
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- QUICK QUESTIONS -->
+
+            <section class="quick-section">
+
+                <h3>
+                    Quick questions
+                </h3>
+
+
+                <div class="quick-grid">
+
+                    <button
+                        onclick="setQuestion('What PPE is required for HSD truck loading?')"
+                    >
+                        🦺
+                        <span>
+                            HSD truck loading PPE
+                        </span>
+                    </button>
+
+
+                    <button
+                        onclick="setQuestion('What are the permit requirements for hot work?')"
+                    >
+                        📋
+                        <span>
+                            Hot work permit requirements
+                        </span>
+                    </button>
+
+
+                    <button
+                        onclick="setQuestion('What should be checked before HSD decanting?')"
+                    >
+                        🔍
+                        <span>
+                            HSD decanting checks
+                        </span>
+                    </button>
+
+
+                    <button
+                        onclick="setQuestion('What should be done during an emergency at KHT?')"
+                    >
+                        🚨
+                        <span>
+                            Emergency procedures
+                        </span>
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- RESPONSE -->
+
+            <section
+                id="response"
+                class="response-card"
+                style="display:none;"
+            >
+
+                <div class="response-header">
+
+                    <h3>
+                        KHT AI Assistant
+                    </h3>
+
+                </div>
+
+
+                <div
+                    id="answer"
+                    class="answer"
+                ></div>
+
+
+                <div
+                    id="source"
+                    class="source"
+                ></div>
+
+            </section>
+
+
+        </main>
+
+
+        <!-- =========================
+             FOOTER
+        ========================== -->
+
+        <footer>
+
+            <p>
+                KHT AI Assistant • Training & Knowledge Support
+            </p>
+
+            <p class="disclaimer">
+                Always verify critical operational and safety
+                information against approved KHT procedures.
+            </p>
+
+        </footer>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
