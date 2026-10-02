@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://YOUR-RENDER-URL.onrender.com";
+const BACKEND_URL = :"https://ai-assistant-chatbot-backend.onrender.com";
 
 const response = await fetch(`${BACKEND_URL}/ask`, {
     method: "POST",
