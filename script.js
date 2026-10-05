@@ -1,172 +1,312 @@
-// ==========================================
-// KHT AI ASSISTANT - FRONTEND
-// ==========================================
+const questionInput =
+    document.getElementById("question");
 
-const BACKEND_URL = "https://ai-assistant-chatbot-backend.onrender.com";
+const askButton =
+    document.getElementById("askButton");
+
+const fileInput =
+    document.getElementById("fileInput");
+
+const fileName =
+    document.getElementById("fileName");
+
+const answerCard =
+    document.getElementById("answerCard");
+
+const answer =
+    document.getElementById("answer");
+
+const loading =
+    document.getElementById("loading");
+
+const documentList =
+    document.getElementById("documentList");
+
+const statusText =
+    document.getElementById("statusText");
 
 
-// ==========================================
-// ASK QUESTION
-// ==========================================
+// ============================================================
+// FILE SELECTION
+// ============================================================
 
-async function askQuestion() {
+fileInput.addEventListener(
+    "change",
+    function () {
 
-    const questionInput = document.getElementById("question");
-    const askButton = document.getElementById("askButton");
-    const responseCard = document.getElementById("response");
-    const answerBox = document.getElementById("answer");
-    const sourceBox = document.getElementById("source");
+        if (
+            fileInput.files &&
+            fileInput.files.length > 0
+        ) {
 
-    const userQuestion = questionInput.value.trim();
+            fileName.textContent =
+                fileInput.files[0].name;
 
-    // Don't send empty questions
-    if (!userQuestion) {
-        answerBox.innerHTML = "Please enter a question first.";
-        responseCard.style.display = "block";
-        sourceBox.textContent = "";
+        } else {
+
+            fileName.textContent =
+                "No file selected";
+        }
+    }
+);
+
+
+// ============================================================
+// LOAD DOCUMENT LIST
+// ============================================================
+
+async function loadDocuments() {
+
+    try {
+
+        const response =
+            await fetch("/documents");
+
+        if (!response.ok) {
+            throw new Error(
+                "Could not load documents"
+            );
+        }
+
+        const data =
+            await response.json();
+
+        statusText.textContent =
+            "System Online";
+
+        if (
+            !data.documents ||
+            data.documents.length === 0
+        ) {
+
+            documentList.innerHTML =
+                "No supported documents found.";
+
+            return;
+        }
+
+        documentList.innerHTML = "";
+
+        data.documents.forEach(
+            function (documentName) {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+                item.className =
+                    "document-item";
+
+                item.innerHTML =
+                    `<i class="fa-regular fa-file"></i>
+                     ${escapeHtml(documentName)}`;
+
+                documentList.appendChild(
+                    item
+                );
+            }
+        );
+
+    } catch (error) {
+
+        statusText.textContent =
+            "Backend Unavailable";
+
+        documentList.innerHTML =
+            "Could not connect to the backend.";
+    }
+}
+
+
+// ============================================================
+// ASK ASSISTANT
+// ============================================================
+
+async function askAssistant() {
+
+    const question =
+        questionInput.value.trim();
+
+    if (!question) {
+
+        alert(
+            "Please enter a question first."
+        );
+
+        questionInput.focus();
+
         return;
     }
 
 
-    // ==========================================
-    // LOADING STATE
-    // ==========================================
-
     askButton.disabled = true;
-    askButton.innerHTML = "Thinking...";
 
-    responseCard.style.display = "block";
+    loading.style.display =
+        "block";
 
-    answerBox.innerHTML = `
-        <div class="loading">
-            <span class="loading-dot"></span>
-            <span>Searching KHT knowledge...</span>
-        </div>
-    `;
+    answerCard.style.display =
+        "none";
 
-    sourceBox.textContent = "";
+    answer.textContent = "";
 
 
     try {
 
-        // ==========================================
-        // SEND QUESTION TO RENDER BACKEND
-        // ==========================================
-
-        const response = await fetch(`${BACKEND_URL}/ask`, {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                question: userQuestion
-            })
-
-        });
+        let response;
 
 
-        // ==========================================
-        // CHECK BACKEND RESPONSE
-        // ==========================================
+        // ----------------------------------------------------
+        // WITH FILE
+        // ----------------------------------------------------
+
+        if (
+            fileInput.files &&
+            fileInput.files.length > 0
+        ) {
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "question",
+                question
+            );
+
+            formData.append(
+                "file",
+                fileInput.files[0]
+            );
+
+
+            response =
+                await fetch(
+                    "/ask-with-file",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+        }
+
+
+        // ----------------------------------------------------
+        // WITHOUT FILE
+        // ----------------------------------------------------
+
+        else {
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "question",
+                question
+            );
+
+
+            response =
+                await fetch(
+                    "/ask",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+        }
+
+
+        const data =
+            await response.json();
+
 
         if (!response.ok) {
 
             throw new Error(
-                `Backend returned status ${response.status}`
+                data.error ||
+                "Something went wrong."
             );
-
         }
 
 
-        const data = await response.json();
+        answer.textContent =
+            data.answer ||
+            "No answer was returned.";
 
 
-        // ==========================================
-        // DISPLAY ANSWER
-        // ==========================================
-
-        if (data.answer) {
-
-            // Convert line breaks into HTML
-            answerBox.innerHTML = data.answer
-                .replace(/\n/g, "<br>");
-
-        } else {
-
-            answerBox.textContent =
-                "The assistant did not return an answer.";
-
-        }
-
-
-        // ==========================================
-        // DISPLAY SOURCE
-        // ==========================================
-
-        if (data.source) {
-
-            sourceBox.textContent =
-                `Source: ${data.source}`;
-
-        } else {
-
-            sourceBox.textContent =
-                "Source: KHT Knowledge Base";
-
-        }
+        answerCard.style.display =
+            "block";
 
 
     } catch (error) {
 
-        console.error(
-            "KHT AI Assistant Error:",
-            error
+        answer.textContent =
+            "Error: " +
+            error.message;
+
+        answerCard.style.display =
+            "block";
+
+    } finally {
+
+        askButton.disabled =
+            false;
+
+        loading.style.display =
+            "none";
+    }
+}
+
+
+// ============================================================
+// BUTTON
+// ============================================================
+
+askButton.addEventListener(
+    "click",
+    askAssistant
+);
+
+
+// ============================================================
+// CTRL + ENTER
+// ============================================================
+
+questionInput.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.ctrlKey &&
+            event.key === "Enter"
+        ) {
+
+            askAssistant();
+        }
+    }
+);
+
+
+// ============================================================
+// HTML ESCAPE
+// ============================================================
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement(
+            "div"
         );
 
+    div.textContent =
+        text;
 
-        // ==========================================
-        // ERROR MESSAGE
-        // ==========================================
-
-        answerBox.innerHTML = `
-            <strong>Unable to connect to the KHT AI Assistant.</strong>
-            <br><br>
-            Please try again in a moment.
-        `;
-
-        sourceBox.textContent = "";
-
-    }
-
-
-    // ==========================================
-    // RESTORE BUTTON
-    // ==========================================
-
-    askButton.disabled = false;
-
-    askButton.innerHTML = `
-        Ask Assistant
-        <span>→</span>
-    `;
-
+    return div.innerHTML;
 }
 
 
-// ==========================================
-// QUICK QUESTIONS
-// ==========================================
+// ============================================================
+// INITIALIZE
+// ============================================================
 
-function setQuestion(question) {
-
-    const questionInput =
-        document.getElementById("question");
-
-    questionInput.value = question;
-
-    questionInput.focus();
-
-}
+loadDocuments();
