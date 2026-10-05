@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,221 +11,661 @@
     <title>KHT AI Assistant</title>
 
     <link rel="stylesheet"
-          href="style.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5f9fc,
+                    #eaf3f8
+                );
+
+            color: #17324d;
+
+            min-height: 100vh;
+        }
+
+        header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #063b63,
+                    #075b87
+                );
+
+            color: white;
+
+            padding: 22px 7%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,0.12);
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .brand-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 12px;
+
+            background: white;
+
+            color: #075b87;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+        }
+
+        .brand h1 {
+
+            margin: 0;
+
+            font-size: 23px;
+        }
+
+        .brand p {
+
+            margin: 4px 0 0;
+
+            opacity: 0.8;
+
+            font-size: 13px;
+        }
+
+        .status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            font-size: 13px;
+        }
+
+        .status-dot {
+
+            width: 9px;
+
+            height: 9px;
+
+            background: #53d769;
+
+            border-radius: 50%;
+        }
+
+        main {
+
+            width: min(1050px, 92%);
+
+            margin: 45px auto;
+        }
+
+        .hero {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .hero h2 {
+
+            font-size: 34px;
+
+            margin: 0 0 10px;
+
+            color: #073d62;
+        }
+
+        .hero p {
+
+            color: #617384;
+
+            font-size: 15px;
+        }
+
+        .assistant-card {
+
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 15px 45px
+                rgba(22, 58, 83, 0.12);
+
+            border:
+                1px solid #e2edf3;
+        }
+
+        .input-label {
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            margin-bottom: 10px;
+
+            display: block;
+        }
+
+        textarea {
+
+            width: 100%;
+
+            min-height: 125px;
+
+            resize: vertical;
+
+            border:
+                1px solid #d6e2e9;
+
+            border-radius: 14px;
+
+            padding: 16px;
+
+            font-size: 15px;
+
+            font-family: inherit;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        textarea:focus {
+
+            border-color: #0879ad;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(8,121,173,0.1);
+        }
+
+        .toolbar {
+
+            margin-top: 15px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+        .upload-area {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .upload-button {
+
+            cursor: pointer;
+
+            padding: 11px 15px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid #d7e5ec;
+
+            background: #f5f9fb;
+
+            color: #174b6d;
+
+            font-size: 13px;
+
+            transition: 0.2s;
+        }
+
+        .upload-button:hover {
+
+            background: #eaf4f8;
+        }
+
+        #fileInput {
+
+            display: none;
+        }
+
+        #fileName {
+
+            color: #6c7d88;
+
+            font-size: 12px;
+        }
+
+        button {
+
+            border: none;
+
+            cursor: pointer;
+
+            padding: 12px 22px;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #075b87,
+                    #0879ad
+                );
+
+            color: white;
+
+            font-weight: 600;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+
+            box-shadow:
+                0 5px 14px
+                rgba(7,91,135,0.2);
+        }
+
+        button:hover {
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 8px 18px
+                rgba(7,91,135,0.25);
+        }
+
+        button:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+        .answer-card {
+
+            margin-top: 25px;
+
+            background: #f9fcfd;
+
+            border:
+                1px solid #dfebf1;
+
+            border-radius: 16px;
+
+            padding: 22px;
+
+            display: none;
+        }
+
+        .answer-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-weight: 700;
+
+            color: #075b87;
+
+            margin-bottom: 14px;
+        }
+
+        #answer {
+
+            line-height: 1.7;
+
+            white-space: pre-wrap;
+
+            color: #29495e;
+
+            font-size: 14px;
+        }
+
+        .loading {
+
+            display: none;
+
+            color: #617384;
+
+            font-size: 14px;
+
+            margin-top: 15px;
+        }
+
+        .documents {
+
+            margin-top: 25px;
+
+            background: #fff;
+
+            border:
+                1px solid #e2edf3;
+
+            border-radius: 16px;
+
+            padding: 20px;
+        }
+
+        .documents h3 {
+
+            margin: 0 0 12px;
+
+            font-size: 16px;
+
+            color: #075b87;
+        }
+
+        #documentList {
+
+            color: #687b87;
+
+            font-size: 13px;
+
+            line-height: 1.8;
+        }
+
+        .document-item {
+
+            padding: 5px 0;
+
+            border-bottom:
+                1px solid #eef3f6;
+        }
+
+        .document-item:last-child {
+
+            border-bottom: none;
+        }
+
+        .warning {
+
+            margin-top: 20px;
+
+            padding: 13px 15px;
+
+            background: #fff9ed;
+
+            border:
+                1px solid #f2dfb2;
+
+            border-radius: 10px;
+
+            color: #755a20;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+        @media (max-width: 650px) {
+
+            header {
+
+                padding: 18px 5%;
+            }
+
+            .status {
+
+                display: none;
+            }
+
+            main {
+
+                width: 94%;
+
+                margin: 25px auto;
+            }
+
+            .hero h2 {
+
+                font-size: 27px;
+            }
+
+            .assistant-card {
+
+                padding: 20px;
+            }
+
+            .toolbar {
+
+                align-items: stretch;
+
+                flex-direction: column;
+            }
+
+            button {
+
+                width: 100%;
+            }
+        }
+
+    </style>
 
 </head>
 
 
 <body>
 
-    <div class="app">
+<header>
 
-        <!-- =========================
-             HEADER
-        ========================== -->
+    <div class="brand">
 
-        <header class="header">
+        <div class="brand-icon">
 
-            <div class="brand">
+            <i class="fa-solid fa-brain"></i>
 
-                <div class="logo">
-                    KHT
-                </div>
+        </div>
 
-                <div>
+        <div>
 
-                    <h1>KHT AI Assistant</h1>
+            <h1>KHT AI Assistant</h1>
 
-                    <p>
-                        Knowledge & Operations Support
-                    </p>
+            <p>Operations Knowledge Assistant</p>
 
-                </div>
+        </div>
 
-            </div>
+    </div>
+
+    <div class="status">
+
+        <span class="status-dot"></span>
+
+        <span id="statusText">
+            Checking system...
+        </span>
+
+    </div>
+
+</header>
 
 
-            <div class="status">
+<main>
 
-                <span class="status-dot"></span>
+    <section class="hero">
 
-                <span>
-                    AI Assistant
+        <h2>
+            Ask KHT Anything
+        </h2>
+
+        <p>
+            Search approved KHT operational knowledge
+            using natural language.
+        </p>
+
+    </section>
+
+
+    <section class="assistant-card">
+
+        <label class="input-label"
+               for="question">
+
+            Your question
+
+        </label>
+
+
+        <textarea
+            id="question"
+            placeholder="Example: What PPE is required for HSD truck loading?"
+        ></textarea>
+
+
+        <div class="toolbar">
+
+            <div class="upload-area">
+
+                <label
+                    class="upload-button"
+                    for="fileInput">
+
+                    <i class="fa-solid fa-paperclip"></i>
+
+                    Upload File
+
+                </label>
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept=".docx,.xlsx,.xls,.csv,.txt,.pdf,.pptx,.json,.md,.html,.htm"
+                >
+
+                <span id="fileName">
+                    No file selected
                 </span>
 
             </div>
 
-        </header>
+
+            <button
+                id="askButton">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
+                Ask Assistant
+
+            </button>
+
+        </div>
 
 
-        <!-- =========================
-             MAIN CONTENT
-        ========================== -->
+        <div
+            class="loading"
+            id="loading">
 
-        <main class="main">
+            <i class="fa-solid fa-spinner fa-spin"></i>
 
+            Reading documents and generating answer...
 
-            <!-- WELCOME SECTION -->
-
-            <section class="welcome">
-
-                <div class="welcome-icon">
-                    ✦
-                </div>
-
-                <h2>
-                    How can I help you?
-                </h2>
-
-                <p>
-                    Ask questions about KHT operations,
-                    procedures, HSE, permits, equipment,
-                    and operational data.
-                </p>
-
-            </section>
+        </div>
 
 
-            <!-- QUESTION BOX -->
+        <div
+            class="answer-card"
+            id="answerCard">
 
-            <section class="question-card">
+            <div class="answer-header">
 
-                <textarea
-                    id="question"
-                    placeholder="Ask a question about KHT..."
-                    rows="4"
-                ></textarea>
+                <i class="fa-solid fa-robot"></i>
 
+                KHT AI Assistant
 
-                <div class="question-footer">
+            </div>
 
-                    <span class="hint">
-                        Ask about procedures, HSE, permits or operations
-                    </span>
+            <div id="answer"></div>
 
-                    <button
-                        id="askButton"
-                        onclick="askQuestion()"
-                    >
-                        Ask Assistant
-                        <span>→</span>
-                    </button>
+        </div>
 
-                </div>
-
-            </section>
+    </section>
 
 
-            <!-- QUICK QUESTIONS -->
+    <section class="documents">
 
-            <section class="quick-section">
+        <h3>
 
-                <h3>
-                    Quick questions
-                </h3>
+            <i class="fa-solid fa-folder-open"></i>
 
+            KHT Knowledge Base
 
-                <div class="quick-grid">
+        </h3>
 
-                    <button
-                        onclick="setQuestion('What PPE is required for HSD truck loading?')"
-                    >
-                        🦺
-                        <span>
-                            HSD truck loading PPE
-                        </span>
-                    </button>
+        <div id="documentList">
+
+            Loading documents...
+
+        </div>
+
+    </section>
 
 
-                    <button
-                        onclick="setQuestion('What are the permit requirements for hot work?')"
-                    >
-                        📋
-                        <span>
-                            Hot work permit requirements
-                        </span>
-                    </button>
+    <div class="warning">
 
+        <strong>Important:</strong>
 
-                    <button
-                        onclick="setQuestion('What should be checked before HSD decanting?')"
-                    >
-                        🔍
-                        <span>
-                            HSD decanting checks
-                        </span>
-                    </button>
-
-
-                    <button
-                        onclick="setQuestion('What should be done during an emergency at KHT?')"
-                    >
-                        🚨
-                        <span>
-                            Emergency procedures
-                        </span>
-                    </button>
-
-                </div>
-
-            </section>
-
-
-            <!-- RESPONSE -->
-
-            <section
-                id="response"
-                class="response-card"
-                style="display:none;"
-            >
-
-                <div class="response-header">
-
-                    <h3>
-                        KHT AI Assistant
-                    </h3>
-
-                </div>
-
-
-                <div
-                    id="answer"
-                    class="answer"
-                ></div>
-
-
-                <div
-                    id="source"
-                    class="source"
-                ></div>
-
-            </section>
-
-
-        </main>
-
-
-        <!-- =========================
-             FOOTER
-        ========================== -->
-
-        <footer>
-
-            <p>
-                KHT AI Assistant • Training & Knowledge Support
-            </p>
-
-            <p class="disclaimer">
-                Always verify critical operational and safety
-                information against approved KHT procedures.
-            </p>
-
-        </footer>
+        This assistant provides information from the
+        available KHT knowledge base. Always follow
+        approved KHT SOPs, permits, HSE requirements,
+        operating procedures, and authorized instructions.
 
     </div>
 
+</main>
 
-    <script src="script.js"></script>
+
+<script src="script.js"></script>
 
 </body>
 
