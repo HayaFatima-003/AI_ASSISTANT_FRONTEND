@@ -128,17 +128,17 @@ async function loadDocuments() {
 
     } catch (error) {
 
-        statusText.textContent =
-            "Backend Unavailable";
+    statusText.textContent =
+        "Backend Error";
 
-        documentList.innerHTML =
-            "Could not connect to the backend.";
+    documentList.innerHTML =
+        "Error: " + error.message;
 
-        console.error(
-            "Document loading error:",
-            error
-        );
-    }
+    console.error(
+        "Document loading error:",
+        error
+    );
+}
 }
 
 
