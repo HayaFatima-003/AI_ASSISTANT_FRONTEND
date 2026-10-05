@@ -1,3 +1,15 @@
+// ============================================================
+// KHT AI ASSISTANT - BACKEND URL
+// ============================================================
+
+const API_URL =
+    "https://ai-assistant-chatbot-backend.onrender.com";
+
+
+// ============================================================
+// ELEMENTS
+// ============================================================
+
 const questionInput =
     document.getElementById("question");
 
@@ -60,9 +72,12 @@ async function loadDocuments() {
     try {
 
         const response =
-            await fetch("/documents");
+            await fetch(
+                `${API_URL}/documents`
+            );
 
         if (!response.ok) {
+
             throw new Error(
                 "Could not load documents"
             );
@@ -73,6 +88,7 @@ async function loadDocuments() {
 
         statusText.textContent =
             "System Online";
+
 
         if (
             !data.documents ||
@@ -85,7 +101,9 @@ async function loadDocuments() {
             return;
         }
 
+
         documentList.innerHTML = "";
+
 
         data.documents.forEach(
             function (documentName) {
@@ -115,6 +133,11 @@ async function loadDocuments() {
 
         documentList.innerHTML =
             "Could not connect to the backend.";
+
+        console.error(
+            "Document loading error:",
+            error
+        );
     }
 }
 
@@ -127,6 +150,7 @@ async function askAssistant() {
 
     const question =
         questionInput.value.trim();
+
 
     if (!question) {
 
@@ -168,10 +192,12 @@ async function askAssistant() {
             const formData =
                 new FormData();
 
+
             formData.append(
                 "question",
                 question
             );
+
 
             formData.append(
                 "file",
@@ -181,7 +207,7 @@ async function askAssistant() {
 
             response =
                 await fetch(
-                    "/ask-with-file",
+                    `${API_URL}/ask-with-file`,
                     {
                         method: "POST",
                         body: formData
@@ -199,6 +225,7 @@ async function askAssistant() {
             const formData =
                 new FormData();
 
+
             formData.append(
                 "question",
                 question
@@ -207,7 +234,7 @@ async function askAssistant() {
 
             response =
                 await fetch(
-                    "/ask",
+                    `${API_URL}/ask`,
                     {
                         method: "POST",
                         body: formData
@@ -215,6 +242,10 @@ async function askAssistant() {
                 );
         }
 
+
+        // ----------------------------------------------------
+        // READ RESPONSE
+        // ----------------------------------------------------
 
         const data =
             await response.json();
@@ -240,12 +271,20 @@ async function askAssistant() {
 
     } catch (error) {
 
+        console.error(
+            "Assistant error:",
+            error
+        );
+
+
         answer.textContent =
             "Error: " +
             error.message;
 
+
         answerCard.style.display =
             "block";
+
 
     } finally {
 
@@ -259,7 +298,7 @@ async function askAssistant() {
 
 
 // ============================================================
-// BUTTON
+// ASK BUTTON
 // ============================================================
 
 askButton.addEventListener(
